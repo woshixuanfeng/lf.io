@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>书旗</title>
+		<link rel="stylesheet" href="index.css" />
+	</head>
+
+	<body>
+		<div class="box" v-cloak>
+			<div v-if="json" v-for="(i,$key) in json">
+				<!-- {{i}} -->
+				<p v-if="$key=='boy'" class="nan">男生分类</p>
+				<p v-if="$key=='girl'" class="nv">女生分类</p>
+				<div v-for="(a,$index) in i">
+					<!-- {{a}} -->
+					<div v-for="(b,$key) in a">
+						{{$key}}
+						<div>
+							<span v-for="(c,$index) in b.list">
+								{{c}} {{$index==b.list.length-1?'':'|'}}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+	</body>
+
+</html>
+<script src="vue.js"></script>
+<script src="vue-resource.js"></script>
+<script>
+	new Vue({
+		el: '.box',
+		data: {
+			json: ''
+		},
+		created() {
+			this.$http.post('http://walden1.shuqireader.com/webapi/rank/classrelation', {
+				type: 1,
+				timestamp: 1564712920694,
+				sign: '2c477da49909ff8f932cf209a29feed5',
+				shuqi_h5: ''
+			}, {
+				emulateJSON: true
+			}).then((fn) => {
+				let data = fn.data.data
+				this.json = data
+				console.log(data)
+			}, (err) => {
+				console.log(err)
+			})
+		}
+	})
+</script>
